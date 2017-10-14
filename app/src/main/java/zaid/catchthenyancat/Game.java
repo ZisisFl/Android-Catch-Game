@@ -23,6 +23,7 @@ public class Game extends AppCompatActivity {
     Button restart_button;
     DisplayMetrics metrics = new DisplayMetrics();
     int combo = 0;
+    DatabaseHelper DH;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,8 @@ public class Game extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(metrics);//screen height width
 
         restart_game();//restarts game if restart button is clicked
+
+        DH = new DatabaseHelper(this, "", null, 1);
     }
 
     public void onResume()

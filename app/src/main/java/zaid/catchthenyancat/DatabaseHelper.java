@@ -2,16 +2,15 @@ package zaid.catchthenyancat;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.TextView;
 
-/**
- * Created by Z on 14-Oct-17.
- */
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, name, factory, version);
+        super(context, "SCORES.DB", factory, version);
     }
 
 
@@ -28,10 +27,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    public void insert_score(int score)
+    public void insert_score(int count)
     {
         ContentValues cv = new ContentValues();
-        cv.put("SCORE", score);
+        cv.put("SCORE", count);
         this.getWritableDatabase().insertOrThrow("SCORE","", cv);
     }
 
@@ -40,8 +39,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         this.getWritableDatabase().delete("SCORES","ID='"+id+"'", null);
     }
 
-    public void update_score()
+    public void update_score(int old_score, int new_score)
     {
+        this.getWritableDatabase().execSQL("UPDATE SCORES SET SCORE = '"+new_score+"' WHERE SCORE = '"+old_score+"'");
         //https://www.youtube.com/watch?v=vW4LZ1TRsRM
+    }
+
+    public void top(TextView top_score)
+    {
+        Cursor cursor = this.getReadableDatabase().rawQuery("SELECT SCORE FROM SCORES ORDER BY DESC LIMIT 1", null);
+        top_score.setText("");
+        while (cursor.moveToNext()){
+            top_score.append(cursor.getString(1));
+        }
     }
 }
