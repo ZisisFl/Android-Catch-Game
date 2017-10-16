@@ -1,6 +1,8 @@
 package zaid.catchthenyancat;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,15 +17,22 @@ import java.util.Random;
 public class Game extends AppCompatActivity {
 
     TextView time_text;
-    TextView score;
-    TextView textView2;
+    TextView current_score_view;
+    TextView high_score_view;
+
     ImageView imgclick;
+
     Random rand = new Random();
-    int count = 0;
+
     Button restart_button;
+
     DisplayMetrics metrics = new DisplayMetrics();
+
     int combo = 0;
-    DatabaseHelper DH;
+    int count = 0;
+    int highscore;
+    int score;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,16 +40,14 @@ public class Game extends AppCompatActivity {
         setContentView(R.layout.activity_game);
 
         time_text = (TextView) findViewById(R.id.time_text);
-        score = (TextView) findViewById(R.id.score);
-        textView2 = (TextView) findViewById(R.id.textView2);
+        current_score_view = (TextView) findViewById(R.id.current_score_view);
+        high_score_view = (TextView) findViewById(R.id.high_score_view);
 
         clickevent();
 
         getWindowManager().getDefaultDisplay().getMetrics(metrics);//screen height width
 
         restart_game();//restarts game if restart button is clicked
-
-        DH = new DatabaseHelper(this, "", null, 1);
     }
 
     public void onResume()
@@ -51,17 +58,20 @@ public class Game extends AppCompatActivity {
             @Override
             public void onTick(long millisUntilFinish)
             {
-                time_text.setText("" + millisUntilFinish / 1000);
+                time_text.setText("Time: " + millisUntilFinish / 1000);
             }
 
             @Override
             public void onFinish()
             {
                 time_text.setText("Time is up!");
-                time_text.setX(0);
-                textView2.setVisibility(View.INVISIBLE);
                 imgclick.setVisibility(View.INVISIBLE);//make nyan cat invisible
                 restart_button.setVisibility(View.VISIBLE);
+                high_score_view.setVisibility(View.VISIBLE);
+
+                score = count;
+
+                score_save();
             }
         };
         timer.start();
@@ -98,7 +108,7 @@ public class Game extends AppCompatActivity {
             public void onClick(View v)
             {
                 count++;
-                score.setText(""+count);
+                current_score_view.setText("Score: " + count);
             }
         });
     }
@@ -113,6 +123,26 @@ public class Game extends AppCompatActivity {
                 recreate();
             }
         });
+    }
+
+    public void score_save()
+    {
+        SharedPreferences settings = getSharedPreferences("GAME_DATA", Context.MODE_PRIVATE);
+        highscore = settings.getInt("HIGH_SCORE", 0);
+
+        if (score > highscore)
+        {
+            high_score_view.setText("Top: "+ score);
+
+            //Save
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putInt("HIGH_SCORE", score);
+            editor.commit();
+        }
+        else
+        {
+            high_score_view.setText("Top: "+ highscore);
+        }
     }
 
 }
