@@ -19,6 +19,7 @@ public class Game extends AppCompatActivity {
     TextView time_text;
     TextView current_score_view;
     TextView high_score_view;
+    TextView combo_view;
 
     ImageView imgclick;
 
@@ -32,6 +33,7 @@ public class Game extends AppCompatActivity {
     int count = 0;
     int highscore;
     int score;
+    boolean clicked = false;
 
 
     @Override
@@ -42,6 +44,7 @@ public class Game extends AppCompatActivity {
         time_text = (TextView) findViewById(R.id.time_text);
         current_score_view = (TextView) findViewById(R.id.current_score_view);
         high_score_view = (TextView) findViewById(R.id.high_score_view);
+        combo_view = (TextView) findViewById(R.id.combo_view);
 
         clickevent();
 
@@ -50,10 +53,32 @@ public class Game extends AppCompatActivity {
         restart_game();//restarts game if restart button is clicked
     }
 
+    public void onStart()
+    {
+        super.onStart();
+
+        game();
+    }
+
+    public void onPause()
+    {
+        super.onPause();
+        //if pause button is clicked
+        //else
+        //Stop the timer and store time remaining in a variable.
+    }
+
     public void onResume()
     {
         super.onResume();
+        //if resume button is clicked
+        //else
+        //Start a new timer with the time remaining in the
+        // aforementioned variable (of course silly, only if not zero)
+    }
 
+    public void game()
+    {
         CountDownTimer timer = new CountDownTimer(60 * 1000, 1000){
             @Override
             public void onTick(long millisUntilFinish)
@@ -88,6 +113,18 @@ public class Game extends AppCompatActivity {
 
                 imgclick.setX(x);
                 imgclick.setY(y);
+
+                if (clicked == true)
+                {
+                    combo++;
+                    combo_view.setText("Combo:"+combo);
+                    clicked = false;
+                }
+                else
+                {
+                    combo=0;
+                    combo_view.setText("Combo:"+combo);
+                }
             }
 
             @Override
@@ -108,6 +145,7 @@ public class Game extends AppCompatActivity {
             public void onClick(View v)
             {
                 count++;
+                clicked = true;
                 current_score_view.setText("Score: " + count);
             }
         });
