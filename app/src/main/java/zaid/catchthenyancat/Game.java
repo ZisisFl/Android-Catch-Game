@@ -3,7 +3,7 @@ package zaid.catchthenyancat;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ImageView;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class Game extends AppCompatActivity {
@@ -24,6 +26,7 @@ public class Game extends AppCompatActivity {
     ImageView imgclick;
     ImageView bonusclick;
     ImageView pause_img;
+    ImageView pause_screen;
 
     Button restart_button;
 
@@ -31,6 +34,8 @@ public class Game extends AppCompatActivity {
     DisplayMetrics metrics = new DisplayMetrics();
     Random rand = new Random();
     Random r = new Random();
+    Handler handler = new Handler();
+    Timer clocktimer = new Timer();
     SoundPlayer sound;
 
     int combo = 0;
@@ -49,10 +54,12 @@ public class Game extends AppCompatActivity {
     int w;
     int h;
     int time;
+    int timeleft = 60;
 
     //flags to check if buttons clicked
     boolean clicked = false;
     boolean pause_flag = false;
+    boolean gamestopped = false;
     boolean bonus_clicked = false;
 
 
@@ -68,93 +75,98 @@ public class Game extends AppCompatActivity {
         high_score_view = (TextView) findViewById(R.id.high_score_view);
         combo_view = (TextView) findViewById(R.id.combo_view);
 
+        pause_screen = (ImageView) findViewById(R.id.pause_screen);
         imgclick = (ImageView) findViewById(R.id.nyancat);
         bonusclick = (ImageView) findViewById(R.id.bonusclick);
         pause_img = (ImageView) findViewById(R.id.pause_img);
 
         clickevent();
+        pauseclick();
 
         getWindowManager().getDefaultDisplay().getMetrics(metrics);//screen height width
 
         restart_game();//restarts game if restart button is clicked
+
+        //timer for game clock
+        clocktimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        gameClock();
+                    }
+                });
+            }
+        }, 0, 1000);
+
+        //timer for characters movement
+        clocktimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        movementClock();
+                    }
+                });
+            }
+        }, 0, 500);
     }
 
     public void onStart()
     {
         super.onStart();
 
-        game();
     }
 
     public void onPause()
     {
         super.onPause();
-        //if pause button is clicked
-        //else
         //Stop the timer and store time remaining in a variable.
     }
 
     public void onResume()
     {
         super.onResume();
-        //if resume button is clicked
-        //else
         //Start a new timer with the time remaining in the
         // aforementioned variable (of course silly, only if not zero)
     }
 
-    public void game()
+    public void gameClock()
     {
-        CountDownTimer timer = new CountDownTimer(60 * 1000, 1000){
-            @Override
-            public void onTick(long millisUntilFinish)
-            {
-                time_text.setText("Time: " + millisUntilFinish / 1000);
-                //time++;
-                //if (time == 10)
-                //{
-                //   bonus();
-                //}
-            }
+        if (timeleft > 0)
+        {
+            timeleft--;
+            time_text.setText("Time: " + timeleft);
+        }
 
-            @Override
-            public void onFinish()
-            {
-                time_text.setText("Time is up!");
-                imgclick.setVisibility(View.INVISIBLE);//make nyan cat invisible
-                restart_button.setVisibility(View.VISIBLE);
-                high_score_view.setVisibility(View.VISIBLE);
+        if (timeleft == 0)
+        {
+            time_text.setText("Time is up!");
+            imgclick.setVisibility(View.INVISIBLE);//make nyan cat invisible
+            combo_view.setVisibility(View.INVISIBLE);
+            restart_button.setVisibility(View.VISIBLE);
+            high_score_view.setVisibility(View.VISIBLE);
+            pause_img.setVisibility(View.INVISIBLE);
 
-                score = count;
+            score = count;
+            score_save();
+        }
+    }
 
-                score_save();
-            }
-        };
-        timer.start();
+    public void movementClock()
+    {
+        w = metrics.widthPixels;
+        h = metrics.heightPixels;
 
-        final CountDownTimer speed_timer = new CountDownTimer(120 * 1000, 500){
-            @Override
-            public void onTick(long millisUntilFinish)
-            {
-                w = metrics.widthPixels;
-                h = metrics.heightPixels;
+        x = rand.nextInt(w-140);//generate random x (0<=x<=max width) 65size of pic
+        y = rand.nextInt((h-200) - 100) + 100;//generate random x (0<=x<=max height)
 
-                x = rand.nextInt(w-140);//generate random x (0<=x<=max width) 65size of pic
-                y = rand.nextInt((h-200) - 100) + 100;//generate random x (0<=x<=max height)
+        imgclick.setX(x);
+        imgclick.setY(y);
 
-                imgclick.setX(x);
-                imgclick.setY(y);
-
-                check_combo();
-            }
-
-            @Override
-            public void onFinish()
-            {
-
-            }
-        };
-        speed_timer.start();
+        check_combo();
     }
 
     public void clickevent() {
@@ -163,10 +175,13 @@ public class Game extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                count++;
-                clicked = true;
-                sound.playhitSound();
-                current_score_view.setText("Score: " + count);
+                if (gamestopped == false)
+                {
+                    count++;
+                    clicked = true;
+                    sound.playhitSound();
+                    current_score_view.setText("Score: " + count);
+                }
             }
         });
     }
@@ -178,7 +193,58 @@ public class Game extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                pause_flag = false;
+                if (pause_flag == false)
+                {
+                    pause_flag = true;
+                    //Stop timer
+                    clocktimer.cancel();
+                    clocktimer = null;
+
+                    //Change image to play
+                    pause_img.setImageResource(R.drawable.ic_play_arrow);
+
+                    pause_screen.setVisibility(View.VISIBLE);
+
+                    gamestopped = true;
+                }
+                else
+                {
+                    pause_flag = false;
+
+                    //change image to pause
+                    pause_img.setImageResource(R.drawable.ic_pause);
+
+                    gamestopped = false;
+
+                    pause_screen.setVisibility(View.GONE);
+
+                    //create and start the timer
+                    clocktimer = new Timer();
+                    clocktimer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    gameClock();
+                                }
+                            });
+                        }
+                    }, 0, 1000);
+
+
+                    clocktimer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    movementClock();
+                                }
+                            });
+                        }
+                    }, 0, 500);
+                }
             }
         });
     }
@@ -245,27 +311,6 @@ public class Game extends AppCompatActivity {
                 bonusclick.setVisibility(View.INVISIBLE);
             }
         }, 3000);
-    }
-
-    public void pausePushed(View view)
-    {
-        if (pause_flag == false)
-        {
-            pause_flag = true;
-            //Stop timer
-
-            //Change image to play
-
-        }
-        else
-        {
-            pause_flag = false;
-
-            //change image to pause
-
-            //create and start the timer
-
-        }
     }
 
 }
