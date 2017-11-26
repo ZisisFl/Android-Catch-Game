@@ -22,6 +22,7 @@ public class Game extends AppCompatActivity {
     TextView current_score_view;
     TextView high_score_view;
     TextView combo_view;
+    TextView time_bonus;
 
     ImageView imgclick;
     ImageView bonusclick;
@@ -53,7 +54,6 @@ public class Game extends AppCompatActivity {
     //screen width and height
     int w;
     int h;
-    int time;
     int timeleft = 60;
 
     //flags to check if buttons clicked
@@ -74,6 +74,7 @@ public class Game extends AppCompatActivity {
         current_score_view = (TextView) findViewById(R.id.current_score_view);
         high_score_view = (TextView) findViewById(R.id.high_score_view);
         combo_view = (TextView) findViewById(R.id.combo_view);
+        time_bonus = (TextView) findViewById(R.id.time_bonus);
 
         pause_screen = (ImageView) findViewById(R.id.pause_screen);
         imgclick = (ImageView) findViewById(R.id.nyancat);
@@ -175,7 +176,7 @@ public class Game extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                if (gamestopped == false)
+                //if (gamestopped == false)
                 {
                     count++;
                     clicked = true;
@@ -288,6 +289,43 @@ public class Game extends AppCompatActivity {
             combo++;
             combo_view.setText("Combo: "+combo);
             clicked = false;
+
+            //give extra time
+            if (combo == 5)
+            {
+                timeleft = timeleft + 2;
+                time_bonus.setText("+ " + 2);
+                time_bonus.setVisibility(View.VISIBLE);
+                time_bonus.postDelayed(new Runnable() {
+                    public void run() {
+                        time_bonus.setVisibility(View.INVISIBLE);
+                    }
+                }, 1000);
+
+            }
+            else if (combo == 10)
+            {
+                timeleft = timeleft + 3;
+                time_bonus.setText("+ " + 3);
+                time_bonus.setVisibility(View.VISIBLE);
+                time_bonus.postDelayed(new Runnable() {
+                    public void run() {
+                        time_bonus.setVisibility(View.INVISIBLE);
+                    }
+                }, 1000);
+            }
+            else if (combo == 15)
+            {
+                timeleft = timeleft + 5;
+                time_bonus.setText("+ " + 5);
+                time_bonus.setVisibility(View.VISIBLE);
+                time_bonus.postDelayed(new Runnable() {
+                    public void run() {
+                        time_bonus.setVisibility(View.INVISIBLE);
+                    }
+                }, 1000);
+            }
+
         }
         else
         {
