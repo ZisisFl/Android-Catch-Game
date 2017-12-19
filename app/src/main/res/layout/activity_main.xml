@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
+    android:background="@android:color/background_light"
     tools:context="zaid.catchthenyancat.MainActivity">
 
     <Button
@@ -16,6 +16,7 @@
         android:fontFamily="casual"
         android:text="Start"
         android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -24,18 +25,19 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="304dp"
+        android:layout_width="wrap_content"
         android:layout_height="47dp"
         android:fontFamily="casual"
-        android:text="Catch The Nyan Cat"
+        android:text="Catch The Ball"
         android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textColor="@android:color/background_light"
+        android:textColor="@android:color/background_dark"
         android:textSize="34sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.125" />
+        app:layout_constraintVertical_bias="0.126" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -47,6 +49,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.344"
-        app:srcCompat="@drawable/giphy" />
+        app:srcCompat="@drawable/ball" />
 
 </android.support.constraint.ConstraintLayout>

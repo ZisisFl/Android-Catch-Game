@@ -74,10 +74,9 @@ public class Game extends AppCompatActivity {
         current_score_view = (TextView) findViewById(R.id.current_score_view);
         high_score_view = (TextView) findViewById(R.id.high_score_view);
         combo_view = (TextView) findViewById(R.id.combo_view);
-        time_bonus = (TextView) findViewById(R.id.time_bonus);
 
         pause_screen = (ImageView) findViewById(R.id.pause_screen);
-        imgclick = (ImageView) findViewById(R.id.nyancat);
+        imgclick = (ImageView) findViewById(R.id.ball);
         bonusclick = (ImageView) findViewById(R.id.bonusclick);
         pause_img = (ImageView) findViewById(R.id.pause_img);
 
@@ -145,7 +144,7 @@ public class Game extends AppCompatActivity {
         if (timeleft == 0)
         {
             time_text.setText("Time is up!");
-            imgclick.setVisibility(View.INVISIBLE);//make nyan cat invisible
+            imgclick.setVisibility(View.INVISIBLE);
             combo_view.setVisibility(View.INVISIBLE);
             restart_button.setVisibility(View.VISIBLE);
             high_score_view.setVisibility(View.VISIBLE);
@@ -176,7 +175,7 @@ public class Game extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                //if (gamestopped == false)
+                if (gamestopped == false)
                 {
                     count++;
                     clicked = true;
@@ -202,7 +201,7 @@ public class Game extends AppCompatActivity {
                     clocktimer = null;
 
                     //Change image to play
-                    pause_img.setImageResource(R.drawable.ic_play_arrow);
+                    pause_img.setImageResource(R.drawable.play);
 
                     pause_screen.setVisibility(View.VISIBLE);
 
@@ -213,7 +212,7 @@ public class Game extends AppCompatActivity {
                     pause_flag = false;
 
                     //change image to pause
-                    pause_img.setImageResource(R.drawable.ic_pause);
+                    pause_img.setImageResource(R.drawable.pause);
 
                     gamestopped = false;
 
@@ -269,7 +268,7 @@ public class Game extends AppCompatActivity {
 
         if (score > highscore)
         {
-            high_score_view.setText("Top: "+ score);
+            high_score_view.setText("Top Score: "+ score);
 
             //Save
             SharedPreferences.Editor editor = settings.edit();
@@ -278,7 +277,7 @@ public class Game extends AppCompatActivity {
         }
         else
         {
-            high_score_view.setText("Top: "+ highscore);
+            high_score_view.setText("Top Score: "+ highscore);
         }
     }
 
