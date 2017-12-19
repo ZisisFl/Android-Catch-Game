@@ -102,7 +102,8 @@
         android:visibility="invisible"
         app:srcCompat="@drawable/basketball"
         tools:layout_editor_absoluteX="312dp"
-        tools:layout_editor_absoluteY="478dp" />
+        tools:layout_editor_absoluteY="478dp"
+        />
 
     <ImageView
         android:id="@+id/pause_img"
@@ -130,5 +131,20 @@
         app:srcCompat="@drawable/paused"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="-42dp" />
+
+    <TextView
+        android:id="@+id/time_bonus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+2"
+        android:textColor="@android:color/background_dark"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.288"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.065" />
 
 </android.support.constraint.ConstraintLayout>

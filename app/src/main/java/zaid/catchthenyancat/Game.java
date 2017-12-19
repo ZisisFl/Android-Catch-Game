@@ -18,6 +18,7 @@ import java.util.TimerTask;
 
 public class Game extends AppCompatActivity {
 
+    //initialization of objects textviews, imageviews, button
     TextView time_text;
     TextView current_score_view;
     TextView high_score_view;
@@ -31,13 +32,14 @@ public class Game extends AppCompatActivity {
 
     Button restart_button;
 
-    //initialize class
+    //initialization of classes
     DisplayMetrics metrics = new DisplayMetrics();
     Random rand = new Random();
     Random r = new Random();
     Handler handler = new Handler();
     Timer clocktimer = new Timer();
     SoundPlayer sound;
+
 
     int combo = 0;
     int count = 0;
@@ -74,6 +76,7 @@ public class Game extends AppCompatActivity {
         current_score_view = (TextView) findViewById(R.id.current_score_view);
         high_score_view = (TextView) findViewById(R.id.high_score_view);
         combo_view = (TextView) findViewById(R.id.combo_view);
+        time_bonus = (TextView) findViewById(R.id.time_bonus);
 
         pause_screen = (ImageView) findViewById(R.id.pause_screen);
         imgclick = (ImageView) findViewById(R.id.ball);
