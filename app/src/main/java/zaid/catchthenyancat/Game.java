@@ -103,7 +103,7 @@ public class Game extends AppCompatActivity {
             }
         }, 0, 1000);
 
-        //timer for characters movement
+        //timer for ball's movement
         clocktimer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -125,18 +125,17 @@ public class Game extends AppCompatActivity {
 
     public void onPause()
     {
-        super.onPause();
-        //Stop the timer and store time remaining in a variable.
+        super.onPause(); //Stops the timer and store time remaining in a variable.
+
     }
 
     public void onResume()
     {
+        //Start a new timer with the time remaining in the beforementioned variable
         super.onResume();
-        //Start a new timer with the time remaining in the
-        // aforementioned variable (of course silly, only if not zero)
     }
 
-    public void gameClock()
+    public void gameClock() //timer for the game
     {
         if (timeleft > 0)
         {
@@ -144,7 +143,7 @@ public class Game extends AppCompatActivity {
             time_text.setText("Time: " + timeleft);
         }
 
-        if (timeleft == 0)
+        if (timeleft == 0) //end of the game
         {
             time_text.setText("Time is up!");
             imgclick.setVisibility(View.INVISIBLE);
@@ -158,8 +157,9 @@ public class Game extends AppCompatActivity {
         }
     }
 
-    public void movementClock()
+    public void movementClock() //clock for the ball to move around
     {
+        //screen metrics
         w = metrics.widthPixels;
         h = metrics.heightPixels;
 
@@ -172,7 +172,8 @@ public class Game extends AppCompatActivity {
         check_combo();
     }
 
-    public void clickevent() {
+    public void clickevent() //clickevent for ball image
+    {
         imgclick.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -182,14 +183,14 @@ public class Game extends AppCompatActivity {
                 {
                     count++;
                     clicked = true;
-                    sound.playhitSound();
+                    sound.playhitSound();// calls the fuction for the click sound
                     current_score_view.setText("Score: " + count);
                 }
             }
         });
     }
 
-    public void pauseclick()
+    public void pauseclick() //pause game fuction
     {
         pause_img.setOnClickListener(new View.OnClickListener()
         {
@@ -252,7 +253,7 @@ public class Game extends AppCompatActivity {
         });
     }
 
-    public void restart_game()
+    public void restart_game() //call fuction recreate with button click
     {
         restart_button = (Button) findViewById(R.id.restart_button);
         restart_button.setOnClickListener(new View.OnClickListener() {
@@ -264,7 +265,7 @@ public class Game extends AppCompatActivity {
         });
     }
 
-    public void score_save()
+    public void score_save() //saves high score only
     {
         SharedPreferences settings = getSharedPreferences("GAME_DATA", Context.MODE_PRIVATE);
         highscore = settings.getInt("HIGH_SCORE", 0);
@@ -284,7 +285,7 @@ public class Game extends AppCompatActivity {
         }
     }
 
-    public void check_combo()
+    public void check_combo() //fuction for the combo
     {
         if (clicked == true)
         {
@@ -336,7 +337,7 @@ public class Game extends AppCompatActivity {
         }
     }
 
-    public void bonus()
+    public void bonus() //not ready
     {
         x_b = r.nextInt(w-140);
         y_b = r.nextInt((h-200) - 100) + 100;
