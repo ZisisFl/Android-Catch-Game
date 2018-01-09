@@ -297,6 +297,7 @@ public class Game extends AppCompatActivity {
             if (combo == 5)
             {
                 timeleft = timeleft + 2;
+                sound.playtimebonusSound();
                 time_bonus.setText("+ " + 2);
                 time_bonus.setVisibility(View.VISIBLE);
                 time_bonus.postDelayed(new Runnable() {
