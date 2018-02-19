@@ -26,16 +26,16 @@ public class Game extends AppCompatActivity {
     TextView time_bonus;
 
     ImageView imgclick;
-    ImageView bonusclick;
     ImageView pause_img;
     ImageView pause_screen;
+    ImageView sound_img;
+    ImageView timer_image;
 
     Button restart_button;
 
     //initialization of classes
     DisplayMetrics metrics = new DisplayMetrics();
     Random rand = new Random();
-    Random r = new Random();
     Handler handler = new Handler();
     Timer clocktimer = new Timer();
     SoundPlayer sound;
@@ -50,9 +50,6 @@ public class Game extends AppCompatActivity {
     int x;
     int y;
 
-    //bonus' coordinates
-    int x_b;
-    int y_b;
     //screen width and height
     int w;
     int h;
@@ -61,9 +58,8 @@ public class Game extends AppCompatActivity {
     //flags to check if buttons clicked
     boolean clicked = false;
     boolean pause_flag = false;
+    boolean sound_flag = false;
     boolean gamestopped = false;
-    boolean bonus_clicked = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,9 +76,11 @@ public class Game extends AppCompatActivity {
 
         pause_screen = (ImageView) findViewById(R.id.pause_screen);
         imgclick = (ImageView) findViewById(R.id.ball);
-        bonusclick = (ImageView) findViewById(R.id.bonusclick);
         pause_img = (ImageView) findViewById(R.id.pause_img);
+        sound_img = (ImageView) findViewById(R.id.sound_img);
+        timer_image = (ImageView) findViewById(R.id.timer_image);
 
+        mute_sound();
         clickevent();
         pauseclick();
 
@@ -140,7 +138,7 @@ public class Game extends AppCompatActivity {
         if (timeleft > 0)
         {
             timeleft--;
-            time_text.setText("Time: " + timeleft);
+            time_text.setText(timeleft + "s");
         }
 
         if (timeleft == 0) //end of the game
@@ -151,6 +149,8 @@ public class Game extends AppCompatActivity {
             restart_button.setVisibility(View.VISIBLE);
             high_score_view.setVisibility(View.VISIBLE);
             pause_img.setVisibility(View.INVISIBLE);
+            sound_img.setVisibility(View.INVISIBLE);
+            timer_image.setVisibility(View.INVISIBLE);
 
             score = count;
             score_save();
@@ -164,7 +164,8 @@ public class Game extends AppCompatActivity {
         h = metrics.heightPixels;
 
         x = rand.nextInt(w-140);//generate random x (0<=x<=max width) 65size of pic
-        y = rand.nextInt((h-200) - 100) + 100;//generate random x (0<=x<=max height)
+        y = rand.nextInt((h-200) - 100) + 100;//generate random y (0<=x<=max height)
+
 
         imgclick.setX(x);
         imgclick.setY(y);
@@ -184,7 +185,7 @@ public class Game extends AppCompatActivity {
                     count++;
                     clicked = true;
                     sound.playhitSound();// calls the fuction for the click sound
-                    current_score_view.setText("Score: " + count);
+                    current_score_view.setText(""+count);
                 }
             }
         });
@@ -248,6 +249,37 @@ public class Game extends AppCompatActivity {
                             });
                         }
                     }, 0, 500);
+                }
+            }
+        });
+    }
+
+    public void mute_sound()
+    {
+        sound_img.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if (sound_flag == false)
+                {
+                    sound_flag = true;
+
+                    //Mute sounds
+                    sound.muteSounds();
+
+                    //Change image to mute
+                    sound_img.setImageResource(R.drawable.mute);
+                }
+                else
+                {
+                    sound_flag = false;
+
+                    //Unmute sounds
+                    sound.unmuteSounds();
+
+                    //change image to on
+                    sound_img.setImageResource(R.drawable.on);
                 }
             }
         });
@@ -337,22 +369,4 @@ public class Game extends AppCompatActivity {
             combo_view.setText("Combo: "+combo);
         }
     }
-
-    public void bonus() //not ready
-    {
-        x_b = r.nextInt(w-140);
-        y_b = r.nextInt((h-200) - 100) + 100;
-
-        bonusclick.setX(x_b);
-        bonusclick.setY(y_b);
-
-        //set bonus visible for 3 seconds
-        bonusclick.setVisibility(View.VISIBLE);
-        bonusclick.postDelayed(new Runnable() {
-            public void run() {
-                bonusclick.setVisibility(View.INVISIBLE);
-            }
-        }, 3000);
-    }
-
 }

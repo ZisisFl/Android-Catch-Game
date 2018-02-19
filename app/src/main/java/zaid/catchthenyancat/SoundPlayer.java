@@ -11,6 +11,8 @@ public class SoundPlayer {
     private static int hitSound;
     private static int time_bonusSound;
 
+    public float master_volume = 1.0f;
+
     public SoundPlayer(Context context)
     {
         //SoundPool (int maxStreams,int streamType,int srcQuality)
@@ -23,12 +25,22 @@ public class SoundPlayer {
     public void playhitSound()
     {
         //play(int soundID, float leftVolume, float rightVolume, int priority, int loop, float rate)
-        soundPool.play(hitSound, 1.0f, 1.0f, 1, 0, 1.0f);
+        soundPool.play(hitSound, master_volume, master_volume, 1, 0, 1.0f);
     }
 
     public void playtimebonusSound()
     {
         //play(int soundID, float leftVolume, float rightVolume, int priority, int loop, float rate)
-        soundPool.play(time_bonusSound, 1.0f, 1.0f, 1, 0, 1.0f);
+        soundPool.play(time_bonusSound, master_volume, master_volume, 1, 0, 1.0f);
+    }
+
+    public void muteSounds()
+    {
+        master_volume = 0.0f;
+    }
+
+    public void unmuteSounds()
+    {
+        master_volume = 1.0f;
     }
 }
