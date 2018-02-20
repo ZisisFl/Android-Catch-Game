@@ -4,6 +4,7 @@ package zaid.catchthenyancat;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -33,6 +34,8 @@ public class Game extends AppCompatActivity {
 
     Button restart_button;
 
+    ConstraintLayout  con;
+
     //initialization of classes
     DisplayMetrics metrics = new DisplayMetrics();
     Random rand = new Random();
@@ -45,6 +48,7 @@ public class Game extends AppCompatActivity {
     int count = 0;
     int highscore;
     int score;
+    int ball_speed = 500;
 
     //character's coordinates
     int x;
@@ -80,6 +84,8 @@ public class Game extends AppCompatActivity {
         sound_img = (ImageView) findViewById(R.id.sound_img);
         timer_image = (ImageView) findViewById(R.id.timer_image);
 
+        con = (ConstraintLayout)findViewById(R.id.con_layout);
+
         mute_sound();
         clickevent();
         pauseclick();
@@ -112,7 +118,7 @@ public class Game extends AppCompatActivity {
                     }
                 });
             }
-        }, 0, 500);
+        }, 0, ball_speed);
     }
 
     public void onStart()
@@ -183,6 +189,7 @@ public class Game extends AppCompatActivity {
                 if (gamestopped == false)
                 {
                     count++;
+                    levels();
                     clicked = true;
                     sound.playhitSound();// calls the fuction for the click sound
                     current_score_view.setText(""+count);
@@ -367,6 +374,28 @@ public class Game extends AppCompatActivity {
         {
             combo=0;
             combo_view.setText("Combo: "+combo);
+        }
+    }
+
+    public void levels()
+    {
+        if (count == 5)
+        {
+            ball_speed = 200;
+            timeleft = timeleft + 30;
+            imgclick.setImageResource(R.drawable.basketball);
+            imgclick.getLayoutParams().height = 60;
+            imgclick.getLayoutParams().width = 60;
+            con.setBackgroundResource(R.color.red);
+        }
+        else if (count == 200)
+        {
+            ball_speed = ball_speed - 50;
+            imgclick.setImageResource(R.drawable.basketball);
+        }
+        else if (count == 300)
+        {
+
         }
     }
 }

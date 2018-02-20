@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/con_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/background_light"
@@ -64,7 +65,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.253"
-        app:srcCompat="@drawable/ball_big" />
+        app:srcCompat="@drawable/football" />
 
     <TextView
         android:id="@+id/high_score_view"
@@ -143,24 +144,24 @@
         android:id="@+id/sound_img"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        app:srcCompat="@drawable/on"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.141"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.011" />
+        app:layout_constraintVertical_bias="0.011"
+        app:srcCompat="@drawable/on" />
 
     <ImageView
         android:id="@+id/timer_image"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        app:srcCompat="@drawable/timer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.838"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.011"/>
+        app:layout_constraintVertical_bias="0.011"
+        app:srcCompat="@drawable/timer" />
 
 </android.support.constraint.ConstraintLayout>
