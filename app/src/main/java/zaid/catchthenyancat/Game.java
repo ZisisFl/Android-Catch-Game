@@ -67,8 +67,8 @@ public class Game extends AppCompatActivity {
     boolean sound_flag = false;
     boolean gamestopped = false;
 
+    //dp size for clickimage
     float dp;
-    int pixels;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -341,46 +341,35 @@ public class Game extends AppCompatActivity {
             //give extra time
             if (combo == 5)
             {
-                timeleft = timeleft + 2;
-                sound.playtimebonusSound();
-                time_bonus.setText("+ " + 2);
-                time_bonus.setVisibility(View.VISIBLE);
-                time_bonus.postDelayed(new Runnable() {
-                    public void run() {
-                        time_bonus.setVisibility(View.INVISIBLE);
-                    }
-                }, 1000);
-
+                time_bonus(2);
             }
             else if (combo == 10)
             {
-                timeleft = timeleft + 3;
-                time_bonus.setText("+ " + 3);
-                time_bonus.setVisibility(View.VISIBLE);
-                time_bonus.postDelayed(new Runnable() {
-                    public void run() {
-                        time_bonus.setVisibility(View.INVISIBLE);
-                    }
-                }, 1000);
+                time_bonus(3);
             }
             else if (combo == 15)
             {
-                timeleft = timeleft + 5;
-                time_bonus.setText("+ " + 5);
-                time_bonus.setVisibility(View.VISIBLE);
-                time_bonus.postDelayed(new Runnable() {
-                    public void run() {
-                        time_bonus.setVisibility(View.INVISIBLE);
-                    }
-                }, 1000);
+                time_bonus(5);
             }
-
         }
         else
         {
             combo = 0;
             combo_view.setText("Combo: "+combo);
         }
+    }
+
+    public void time_bonus(int extra_time)
+    {
+        timeleft = timeleft + extra_time;
+        sound.playtimebonusSound();
+        time_bonus.setText("+ " + extra_time);
+        time_bonus.setVisibility(View.VISIBLE);
+        time_bonus.postDelayed(new Runnable() {
+            public void run() {
+                time_bonus.setVisibility(View.INVISIBLE);
+            }
+        }, 1000);
     }
 
     public void levels()
@@ -390,9 +379,11 @@ public class Game extends AppCompatActivity {
         if (count == 1)
         {
             dp = 60;
+            //convert dp to pixels
             float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
             ball_speed = ball_speed - 50;
-            timeleft = timeleft + 30;
+            //get extra time
+            time_bonus(30);
             imgclick.setImageResource(R.drawable.basketball);
             imgclick.getLayoutParams().height = Math.round(pixels);
             imgclick.getLayoutParams().width = Math.round(pixels);
@@ -404,7 +395,7 @@ public class Game extends AppCompatActivity {
             dp = 55;
             float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
             ball_speed = ball_speed - 50;
-            timeleft = timeleft + 30;
+            time_bonus(30);
             imgclick.setImageResource(R.drawable.bowling);
             imgclick.getLayoutParams().height = Math.round(pixels);
             imgclick.getLayoutParams().width = Math.round(pixels);
@@ -416,7 +407,7 @@ public class Game extends AppCompatActivity {
             dp = 50;
             float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
             ball_speed = ball_speed - 50;
-            timeleft = timeleft + 30;
+            time_bonus(30);
             imgclick.setImageResource(R.drawable.volleyball);
             imgclick.getLayoutParams().height = Math.round(pixels);
             imgclick.getLayoutParams().width = Math.round(pixels);
@@ -428,7 +419,7 @@ public class Game extends AppCompatActivity {
             dp = 45;
             float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
             ball_speed = ball_speed - 50;
-            timeleft = timeleft + 30;
+            time_bonus(30);
             imgclick.setImageResource(R.drawable.baseball);
             imgclick.getLayoutParams().height = Math.round(pixels);
             imgclick.getLayoutParams().width = Math.round(pixels);
@@ -440,7 +431,7 @@ public class Game extends AppCompatActivity {
             dp = 40;
             float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
             ball_speed = ball_speed - 50;
-            timeleft = timeleft + 30;
+            time_bonus(30);
             imgclick.setImageResource(R.drawable.tennisball);
             imgclick.getLayoutParams().height = Math.round(pixels);
             imgclick.getLayoutParams().width = Math.round(pixels);
@@ -452,7 +443,7 @@ public class Game extends AppCompatActivity {
             dp = 35;
             float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
             ball_speed = ball_speed - 50;
-            timeleft = timeleft + 30;
+            time_bonus(30);
             imgclick.setImageResource(R.drawable.eightball);
             imgclick.getLayoutParams().height = Math.round(pixels);
             imgclick.getLayoutParams().width = Math.round(pixels);
@@ -464,7 +455,7 @@ public class Game extends AppCompatActivity {
             dp = 30;
             float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
             ball_speed = ball_speed - 50;
-            timeleft = timeleft + 30;
+            time_bonus(30);
             imgclick.setImageResource(R.drawable.golfball);
             imgclick.getLayoutParams().height = Math.round(pixels);
             imgclick.getLayoutParams().width = Math.round(pixels);
@@ -476,7 +467,7 @@ public class Game extends AppCompatActivity {
             dp = 25;
             float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
             ball_speed = ball_speed - 50;
-            timeleft = timeleft + 30;
+            time_bonus(30);
             imgclick.setImageResource(R.drawable.shuttlecock);
             imgclick.getLayoutParams().height = Math.round(pixels);
             imgclick.getLayoutParams().width = Math.round(pixels);
