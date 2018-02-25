@@ -3,11 +3,13 @@ package zaid.catchthenyancat;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -65,6 +67,9 @@ public class Game extends AppCompatActivity {
     boolean sound_flag = false;
     boolean gamestopped = false;
 
+    float dp;
+    int pixels;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +90,7 @@ public class Game extends AppCompatActivity {
         timer_image = (ImageView) findViewById(R.id.timer_image);
 
         con = (ConstraintLayout)findViewById(R.id.con_layout);
+
 
         mute_sound();
         clickevent();
@@ -372,30 +378,110 @@ public class Game extends AppCompatActivity {
         }
         else
         {
-            combo=0;
+            combo = 0;
             combo_view.setText("Combo: "+combo);
         }
     }
 
     public void levels()
     {
-        if (count == 5)
+        Resources r = getResources();
+
+        if (count == 1)
         {
-            ball_speed = 200;
+            dp = 60;
+            float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
+            ball_speed = ball_speed - 50;
             timeleft = timeleft + 30;
             imgclick.setImageResource(R.drawable.basketball);
-            imgclick.getLayoutParams().height = 60;
-            imgclick.getLayoutParams().width = 60;
+            imgclick.getLayoutParams().height = Math.round(pixels);
+            imgclick.getLayoutParams().width = Math.round(pixels);
+            imgclick.requestLayout();
             con.setBackgroundResource(R.color.red);
         }
-        else if (count == 200)
+        else if (count == 2)
         {
+            dp = 55;
+            float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
             ball_speed = ball_speed - 50;
-            imgclick.setImageResource(R.drawable.basketball);
+            timeleft = timeleft + 30;
+            imgclick.setImageResource(R.drawable.bowling);
+            imgclick.getLayoutParams().height = Math.round(pixels);
+            imgclick.getLayoutParams().width = Math.round(pixels);
+            imgclick.requestLayout();
+            con.setBackgroundResource(R.color.red);
         }
-        else if (count == 300)
+        else if (count == 3)
         {
-
+            dp = 50;
+            float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
+            ball_speed = ball_speed - 50;
+            timeleft = timeleft + 30;
+            imgclick.setImageResource(R.drawable.volleyball);
+            imgclick.getLayoutParams().height = Math.round(pixels);
+            imgclick.getLayoutParams().width = Math.round(pixels);
+            imgclick.requestLayout();
+            con.setBackgroundResource(R.color.red);
+        }
+        else if (count == 4)
+        {
+            dp = 45;
+            float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
+            ball_speed = ball_speed - 50;
+            timeleft = timeleft + 30;
+            imgclick.setImageResource(R.drawable.baseball);
+            imgclick.getLayoutParams().height = Math.round(pixels);
+            imgclick.getLayoutParams().width = Math.round(pixels);
+            imgclick.requestLayout();
+            con.setBackgroundResource(R.color.red);
+        }
+        else if (count == 5)
+        {
+            dp = 40;
+            float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
+            ball_speed = ball_speed - 50;
+            timeleft = timeleft + 30;
+            imgclick.setImageResource(R.drawable.tennisball);
+            imgclick.getLayoutParams().height = Math.round(pixels);
+            imgclick.getLayoutParams().width = Math.round(pixels);
+            imgclick.requestLayout();
+            con.setBackgroundResource(R.color.red);
+        }
+        else if (count == 6)
+        {
+            dp = 35;
+            float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
+            ball_speed = ball_speed - 50;
+            timeleft = timeleft + 30;
+            imgclick.setImageResource(R.drawable.eightball);
+            imgclick.getLayoutParams().height = Math.round(pixels);
+            imgclick.getLayoutParams().width = Math.round(pixels);
+            imgclick.requestLayout();
+            con.setBackgroundResource(R.color.red);
+        }
+        else if (count == 7)
+        {
+            dp = 30;
+            float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
+            ball_speed = ball_speed - 50;
+            timeleft = timeleft + 30;
+            imgclick.setImageResource(R.drawable.golfball);
+            imgclick.getLayoutParams().height = Math.round(pixels);
+            imgclick.getLayoutParams().width = Math.round(pixels);
+            imgclick.requestLayout();
+            con.setBackgroundResource(R.color.red);
+        }
+        else if (count == 8)
+        {
+            dp = 25;
+            float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
+            ball_speed = ball_speed - 50;
+            timeleft = timeleft + 30;
+            imgclick.setImageResource(R.drawable.shuttlecock);
+            imgclick.getLayoutParams().height = Math.round(pixels);
+            imgclick.getLayoutParams().width = Math.round(pixels);
+            imgclick.requestLayout();
+            con.setBackgroundResource(R.color.red);
         }
     }
 }
