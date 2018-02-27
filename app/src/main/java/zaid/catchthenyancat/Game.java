@@ -43,6 +43,7 @@ public class Game extends AppCompatActivity {
     Random rand = new Random();
     Handler handler = new Handler();
     Timer clocktimer = new Timer();
+    Timer gametimer = new Timer();
     SoundPlayer sound;
 
 
@@ -114,7 +115,7 @@ public class Game extends AppCompatActivity {
         }, 0, 1000);
 
         //timer for ball's movement
-        clocktimer.schedule(new TimerTask() {
+        gametimer.schedule(new TimerTask() {
             @Override
             public void run() {
                 handler.post(new Runnable() {
@@ -217,6 +218,8 @@ public class Game extends AppCompatActivity {
                     //Stop timer
                     clocktimer.cancel();
                     clocktimer = null;
+                    gametimer.cancel();
+                    gametimer = null;
 
                     //Change image to play
                     pause_img.setImageResource(R.drawable.play);
@@ -238,6 +241,8 @@ public class Game extends AppCompatActivity {
 
                     //create and start the timer
                     clocktimer = new Timer();
+                    gametimer = new Timer();
+
                     clocktimer.schedule(new TimerTask() {
                         @Override
                         public void run() {
@@ -251,7 +256,7 @@ public class Game extends AppCompatActivity {
                     }, 0, 1000);
 
 
-                    clocktimer.schedule(new TimerTask() {
+                    gametimer.schedule(new TimerTask() {
                         @Override
                         public void run() {
                             handler.post(new Runnable() {
@@ -261,7 +266,7 @@ public class Game extends AppCompatActivity {
                                 }
                             });
                         }
-                    }, 0, 500);
+                    }, 0, ball_speed);
                 }
             }
         });
@@ -372,107 +377,84 @@ public class Game extends AppCompatActivity {
         }, 1000);
     }
 
-    public void levels()
+    public void level_attributes(int dp,int ball_speed, String image_name, String color_name)
     {
         Resources r = getResources();
 
+        //convert dp to pixels
+        float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
+        //get extra time
+        time_bonus(30);
+        //change image source size and background color
+        imgclick.setImageResource(getResources().getIdentifier(image_name, "drawable", getPackageName()));
+        imgclick.getLayoutParams().height = Math.round(pixels);
+        imgclick.getLayoutParams().width = Math.round(pixels);
+        imgclick.requestLayout();
+        con.setBackgroundResource(getResources().getIdentifier(color_name, "color", getPackageName()));
+
+        //reset gametimer speed
+        gametimer.cancel();
+        gametimer = null;
+        //accelarate gametimer speed
+        gametimer = new Timer();
+
+        gametimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        movementClock();
+                    }
+                });
+            }
+        }, 0, ball_speed);
+    }
+
+    public void levels()
+    {
         if (count == 1)
         {
-            dp = 60;
+            level_attributes(60, 200, "basketball", "red");
+            //dp = 60;
             //convert dp to pixels
-            float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
-            ball_speed = ball_speed - 50;
+            //float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
+            //ball_speed = ball_speed - 50;
             //get extra time
-            time_bonus(30);
-            imgclick.setImageResource(R.drawable.basketball);
-            imgclick.getLayoutParams().height = Math.round(pixels);
-            imgclick.getLayoutParams().width = Math.round(pixels);
-            imgclick.requestLayout();
-            con.setBackgroundResource(R.color.red);
+            //time_bonus(30);
+            //imgclick.setImageResource(R.drawable.basketball);
+            //imgclick.getLayoutParams().height = Math.round(pixels);
+            //imgclick.getLayoutParams().width = Math.round(pixels);
+            //imgclick.requestLayout();
+            //con.setBackgroundResource(R.color.red);
         }
         else if (count == 2)
         {
-            dp = 55;
-            float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
-            ball_speed = ball_speed - 50;
-            time_bonus(30);
-            imgclick.setImageResource(R.drawable.bowling);
-            imgclick.getLayoutParams().height = Math.round(pixels);
-            imgclick.getLayoutParams().width = Math.round(pixels);
-            imgclick.requestLayout();
-            con.setBackgroundResource(R.color.red);
+            level_attributes(55, 200, "bowling", "red");
         }
         else if (count == 3)
         {
-            dp = 50;
-            float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
-            ball_speed = ball_speed - 50;
-            time_bonus(30);
-            imgclick.setImageResource(R.drawable.volleyball);
-            imgclick.getLayoutParams().height = Math.round(pixels);
-            imgclick.getLayoutParams().width = Math.round(pixels);
-            imgclick.requestLayout();
-            con.setBackgroundResource(R.color.red);
+            level_attributes(50, 200, "volleyball", "red");
         }
         else if (count == 4)
         {
-            dp = 45;
-            float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
-            ball_speed = ball_speed - 50;
-            time_bonus(30);
-            imgclick.setImageResource(R.drawable.baseball);
-            imgclick.getLayoutParams().height = Math.round(pixels);
-            imgclick.getLayoutParams().width = Math.round(pixels);
-            imgclick.requestLayout();
-            con.setBackgroundResource(R.color.red);
+            level_attributes(45, 200, "baseball", "red");
         }
         else if (count == 5)
         {
-            dp = 40;
-            float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
-            ball_speed = ball_speed - 50;
-            time_bonus(30);
-            imgclick.setImageResource(R.drawable.tennisball);
-            imgclick.getLayoutParams().height = Math.round(pixels);
-            imgclick.getLayoutParams().width = Math.round(pixels);
-            imgclick.requestLayout();
-            con.setBackgroundResource(R.color.red);
+            level_attributes(40, 200, "tennisball", "red");
         }
         else if (count == 6)
         {
-            dp = 35;
-            float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
-            ball_speed = ball_speed - 50;
-            time_bonus(30);
-            imgclick.setImageResource(R.drawable.eightball);
-            imgclick.getLayoutParams().height = Math.round(pixels);
-            imgclick.getLayoutParams().width = Math.round(pixels);
-            imgclick.requestLayout();
-            con.setBackgroundResource(R.color.red);
+            level_attributes(35, 200, "eightball", "red");
         }
         else if (count == 7)
         {
-            dp = 30;
-            float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
-            ball_speed = ball_speed - 50;
-            time_bonus(30);
-            imgclick.setImageResource(R.drawable.golfball);
-            imgclick.getLayoutParams().height = Math.round(pixels);
-            imgclick.getLayoutParams().width = Math.round(pixels);
-            imgclick.requestLayout();
-            con.setBackgroundResource(R.color.red);
+            level_attributes(30, 200, "golfball", "red");
         }
         else if (count == 8)
         {
-            dp = 25;
-            float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
-            ball_speed = ball_speed - 50;
-            time_bonus(30);
-            imgclick.setImageResource(R.drawable.shuttlecock);
-            imgclick.getLayoutParams().height = Math.round(pixels);
-            imgclick.getLayoutParams().width = Math.round(pixels);
-            imgclick.requestLayout();
-            con.setBackgroundResource(R.color.red);
+            level_attributes(30, 200, "shuttlecock", "red");
         }
     }
 }
