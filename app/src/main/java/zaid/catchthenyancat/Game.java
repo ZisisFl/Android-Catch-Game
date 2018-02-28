@@ -51,7 +51,7 @@ public class Game extends AppCompatActivity {
     int count = 0;
     int highscore;
     int score;
-    int ball_speed = 500;
+    int ball_speed = 600;//starting speed
 
     //character's coordinates
     int x;
@@ -380,7 +380,6 @@ public class Game extends AppCompatActivity {
     public void level_attributes(int dp,int ball_speed, String image_name, String color_name)
     {
         Resources r = getResources();
-
         //convert dp to pixels
         float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
         //get extra time
@@ -415,7 +414,8 @@ public class Game extends AppCompatActivity {
     {
         if (count == 1)
         {
-            level_attributes(60, 200, "basketball", "red");
+            ball_speed = 600; //update variable in case of pausing game
+            level_attributes(60, 600, "basketball", "red");
             //dp = 60;
             //convert dp to pixels
             //float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
@@ -430,31 +430,31 @@ public class Game extends AppCompatActivity {
         }
         else if (count == 2)
         {
-            level_attributes(55, 200, "bowling", "red");
+            level_attributes(55, 550, "bowling", "red");
         }
         else if (count == 3)
         {
-            level_attributes(50, 200, "volleyball", "red");
+            level_attributes(50, 550, "volleyball", "red");
         }
         else if (count == 4)
         {
-            level_attributes(45, 200, "baseball", "red");
+            level_attributes(45, 500, "baseball", "red");
         }
         else if (count == 5)
         {
-            level_attributes(40, 200, "tennisball", "red");
+            level_attributes(40, 500, "tennisball", "red");
         }
         else if (count == 6)
         {
-            level_attributes(35, 200, "eightball", "red");
+            level_attributes(35, 450, "eightball", "red");
         }
         else if (count == 7)
         {
-            level_attributes(30, 200, "golfball", "red");
+            level_attributes(30, 450, "golfball", "red");
         }
         else if (count == 8)
         {
-            level_attributes(30, 200, "shuttlecock", "red");
+            level_attributes(30, 350, "shuttlecock", "red");
         }
     }
 }
