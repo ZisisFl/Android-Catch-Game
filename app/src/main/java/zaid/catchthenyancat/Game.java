@@ -27,14 +27,17 @@ public class Game extends AppCompatActivity {
     TextView high_score_view;
     TextView combo_view;
     TextView time_bonus;
+    TextView coins_text;
 
     ImageView imgclick;
     ImageView pause_img;
     ImageView pause_screen;
     ImageView sound_img;
     ImageView timer_image;
+    ImageView extra_coins;
 
     Button restart_button;
+    Button resume_button;
 
     ConstraintLayout  con;
 
@@ -68,8 +71,8 @@ public class Game extends AppCompatActivity {
     boolean sound_flag = false;
     boolean gamestopped = false;
 
-    //dp size for clickimage
-    float dp;
+    int coins = 200;
+    boolean resume_flag = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,12 +86,17 @@ public class Game extends AppCompatActivity {
         high_score_view = (TextView) findViewById(R.id.high_score_view);
         combo_view = (TextView) findViewById(R.id.combo_view);
         time_bonus = (TextView) findViewById(R.id.time_bonus);
+        coins_text = (TextView) findViewById(R.id.coins);
 
         pause_screen = (ImageView) findViewById(R.id.pause_screen);
         imgclick = (ImageView) findViewById(R.id.ball);
         pause_img = (ImageView) findViewById(R.id.pause_img);
         sound_img = (ImageView) findViewById(R.id.sound_img);
         timer_image = (ImageView) findViewById(R.id.timer_image);
+        extra_coins = (ImageView) findViewById(R.id.extra_coins);
+
+        restart_button = (Button) findViewById(R.id.restart_button);
+        resume_button = (Button) findViewById(R.id.resume_button);
 
         con = (ConstraintLayout)findViewById(R.id.con_layout);
 
@@ -99,6 +107,7 @@ public class Game extends AppCompatActivity {
 
         getWindowManager().getDefaultDisplay().getMetrics(metrics);//screen height width
 
+        resume_game();
         restart_game();//restarts game if restart button is clicked
 
         //timer for game clock
@@ -156,14 +165,28 @@ public class Game extends AppCompatActivity {
 
         if (timeleft == 0) //end of the game
         {
-            time_text.setText("Time is up!");
+            time_text.setText("");
+            coins_text.setText("Coins: "+coins);
+
             imgclick.setVisibility(View.INVISIBLE);
             combo_view.setVisibility(View.INVISIBLE);
             restart_button.setVisibility(View.VISIBLE);
+            resume_button.setVisibility(View.VISIBLE);
+            coins_text.setVisibility(View.VISIBLE);
             high_score_view.setVisibility(View.VISIBLE);
             pause_img.setVisibility(View.INVISIBLE);
             sound_img.setVisibility(View.INVISIBLE);
             timer_image.setVisibility(View.INVISIBLE);
+
+            if (resume_flag == false)
+                resume_button.setVisibility(View.GONE);
+            else
+            {
+                resume_button.setVisibility(View.VISIBLE);
+                extra_coins.setVisibility(View.VISIBLE);
+                coins = coins + (count/100);//earn the 1/100 of score as coins
+            }
+
 
             score = count;
             score_save();
@@ -305,7 +328,6 @@ public class Game extends AppCompatActivity {
 
     public void restart_game() //call fuction recreate with button click
     {
-        restart_button = (Button) findViewById(R.id.restart_button);
         restart_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
@@ -315,6 +337,69 @@ public class Game extends AppCompatActivity {
         });
     }
 
+    public void resume_game()
+    {
+        resume_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                if (coins >= 200 && resume_flag == true)
+                {
+                    resume_flag = false;
+                    coins = coins - 200;
+
+                    //restart game with prev score and 30 sec time
+                    timeleft = 30;
+
+                    clocktimer.cancel();
+                    clocktimer = null;
+                    gametimer.cancel();
+                    gametimer = null;
+
+                    clocktimer = new Timer();
+                    gametimer = new Timer();
+
+                    clocktimer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    gameClock();
+                                }
+                            });
+                        }
+                    }, 0, 1000);
+
+
+                    gametimer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    movementClock();
+                                }
+                            });
+                        }
+                    }, 0, ball_speed);
+
+                    imgclick.setVisibility(View.VISIBLE);
+                    restart_button.setVisibility(View.INVISIBLE);
+                    resume_button.setVisibility(View.INVISIBLE);
+                    coins_text.setVisibility(View.INVISIBLE);
+                    high_score_view.setVisibility(View.INVISIBLE);
+                    pause_img.setVisibility(View.VISIBLE);
+                    sound_img.setVisibility(View.VISIBLE);
+                    timer_image.setVisibility(View.VISIBLE);
+                    resume_button.setVisibility(View.INVISIBLE);
+                    extra_coins.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+    }
+
+
     public void score_save() //saves high score only
     {
         SharedPreferences settings = getSharedPreferences("GAME_DATA", Context.MODE_PRIVATE);
@@ -322,7 +407,7 @@ public class Game extends AppCompatActivity {
 
         if (score > highscore)
         {
-            high_score_view.setText("Top Score: "+ score);
+            high_score_view.setText("Top "+ score);
 
             //Save
             SharedPreferences.Editor editor = settings.edit();
@@ -333,6 +418,11 @@ public class Game extends AppCompatActivity {
         {
             high_score_view.setText("Top Score: "+ highscore);
         }
+    }
+
+    public void get_coins()
+    {
+
     }
 
     public void check_combo() //fuction for the combo
@@ -412,49 +502,45 @@ public class Game extends AppCompatActivity {
 
     public void levels()
     {
-        if (count == 1)
+        if (count == 100)
         {
             ball_speed = 600; //update variable in case of pausing game
-            level_attributes(60, 600, "basketball", "red");
-            //dp = 60;
-            //convert dp to pixels
-            //float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
-            //ball_speed = ball_speed - 50;
-            //get extra time
-            //time_bonus(30);
-            //imgclick.setImageResource(R.drawable.basketball);
-            //imgclick.getLayoutParams().height = Math.round(pixels);
-            //imgclick.getLayoutParams().width = Math.round(pixels);
-            //imgclick.requestLayout();
-            //con.setBackgroundResource(R.color.red);
+            level_attributes(60, 600, "basketball", "basket");
         }
-        else if (count == 2)
+        else if (count == 200)
         {
-            level_attributes(55, 550, "bowling", "red");
+            ball_speed = 550;
+            level_attributes(55, 550, "bowling", "bowling");
         }
-        else if (count == 3)
+        else if (count == 300)
         {
-            level_attributes(50, 550, "volleyball", "red");
+            ball_speed = 550;
+            level_attributes(50, 550, "volleyball", "volley");
         }
-        else if (count == 4)
+        else if (count == 400)
         {
-            level_attributes(45, 500, "baseball", "red");
+            ball_speed = 500;
+            level_attributes(45, 500, "baseball", "baseball");
         }
-        else if (count == 5)
+        else if (count == 500)
         {
-            level_attributes(40, 500, "tennisball", "red");
+            ball_speed = 500;
+            level_attributes(40, 500, "tennisball", "tennis");
         }
-        else if (count == 6)
+        else if (count == 600)
         {
-            level_attributes(35, 450, "eightball", "red");
+            ball_speed = 450;
+            level_attributes(35, 450, "eightball", "billiard");
         }
-        else if (count == 7)
+        else if (count == 700)
         {
-            level_attributes(30, 450, "golfball", "red");
+            ball_speed = 450;
+            level_attributes(30, 450, "golfball", "golf");
         }
-        else if (count == 8)
+        else if (count == 800)
         {
-            level_attributes(30, 350, "shuttlecock", "red");
+            ball_speed = 350;
+            level_attributes(30, 350, "shuttlecock", "shuttlecock");
         }
     }
 }

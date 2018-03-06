@@ -3,5 +3,13 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#003366</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="red">#F44242</color>
+
+    <color name="basket">#bfff80</color>
+    <color name="bowling">#ffff66</color>
+    <color name="volley">#c2c2d6</color>
+    <color name="baseball">#ffaa80</color>
+    <color name="tennis">#b3d9ff</color>
+    <color name="billiard">#ebb3ff</color>
+    <color name="golf">#ffb3b3</color>
+    <color name="shuttlecock">#99ffeb</color>
 </resources>
