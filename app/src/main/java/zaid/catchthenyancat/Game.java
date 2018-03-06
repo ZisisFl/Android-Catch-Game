@@ -14,9 +14,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ImageView;
+import android.widget.Toast;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
 
 
 public class Game extends AppCompatActivity {
@@ -72,7 +76,9 @@ public class Game extends AppCompatActivity {
     boolean gamestopped = false;
 
     int coins = 200;
+
     boolean resume_flag = true;
+    private RewardedVideoAd mRewardedVideoAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +105,13 @@ public class Game extends AppCompatActivity {
         resume_button = (Button) findViewById(R.id.resume_button);
 
         con = (ConstraintLayout)findViewById(R.id.con_layout);
+
+        MobileAds.initialize(this, "ca-app-pub-3863704956834499~8953812244");
+
+        mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
+        mRewardedVideoAd.setRewardedVideoAdListener(this);
+
+        loadRewardedVideoAd();
 
 
         mute_sound();
@@ -165,8 +178,12 @@ public class Game extends AppCompatActivity {
 
         if (timeleft == 0) //end of the game
         {
+            clocktimer.cancel();
+            clocktimer = null;
+            gametimer.cancel();
+            gametimer = null;
+
             time_text.setText("");
-            coins_text.setText("Coins: "+coins);
 
             imgclick.setVisibility(View.INVISIBLE);
             combo_view.setVisibility(View.INVISIBLE);
@@ -184,12 +201,13 @@ public class Game extends AppCompatActivity {
             {
                 resume_button.setVisibility(View.VISIBLE);
                 extra_coins.setVisibility(View.VISIBLE);
-                coins = coins + (count/100);//earn the 1/100 of score as coins
+                coins = coins + 1;//(count/100);//earn the 1/100 of score as coins
             }
 
 
             score = count;
             score_save();
+            coin_save();
         }
     }
 
@@ -349,12 +367,7 @@ public class Game extends AppCompatActivity {
                     coins = coins - 200;
 
                     //restart game with prev score and 30 sec time
-                    timeleft = 30;
-
-                    clocktimer.cancel();
-                    clocktimer = null;
-                    gametimer.cancel();
-                    gametimer = null;
+                    timeleft = 31;
 
                     clocktimer = new Timer();
                     gametimer = new Timer();
@@ -395,6 +408,10 @@ public class Game extends AppCompatActivity {
                     resume_button.setVisibility(View.INVISIBLE);
                     extra_coins.setVisibility(View.INVISIBLE);
                 }
+                else if (coins < 200)
+                {
+                    Toast.makeText(Game.this, "You need 200 coins", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -407,7 +424,7 @@ public class Game extends AppCompatActivity {
 
         if (score > highscore)
         {
-            high_score_view.setText("Top "+ score);
+            high_score_view.setText("Top Score: "+ score);
 
             //Save
             SharedPreferences.Editor editor = settings.edit();
@@ -420,8 +437,23 @@ public class Game extends AppCompatActivity {
         }
     }
 
+    public void coin_save() //saves high score only
+    {
+        SharedPreferences coinssave = getSharedPreferences("GAME_DATA1", Context.MODE_PRIVATE);
+            //Save
+            SharedPreferences.Editor editor1 = coinssave.edit();
+            editor1.putInt("COINS", coins);
+            editor1.commit();
+
+        coins_text.setText("Coins: "+coins);
+
+    }
+
     public void get_coins()
     {
+        if (mRewardedVideoAd.isLoaded()) {
+            mRewardedVideoAd.show();
+        }
 
     }
 
@@ -542,5 +574,10 @@ public class Game extends AppCompatActivity {
             ball_speed = 350;
             level_attributes(30, 350, "shuttlecock", "shuttlecock");
         }
+    }
+
+    private void loadRewardedVideoAd() {
+        mRewardedVideoAd.loadAd("ca-app-pub-3940256099942544/5224354917",
+                new AdRequest.Builder().build());
     }
 }
