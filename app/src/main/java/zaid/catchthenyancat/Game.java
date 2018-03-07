@@ -15,12 +15,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.reward.RewardedVideoAd;
 
 
 public class Game extends AppCompatActivity {
@@ -76,9 +74,7 @@ public class Game extends AppCompatActivity {
     boolean gamestopped = false;
 
     int coins = 200;
-
     boolean resume_flag = true;
-    private RewardedVideoAd mRewardedVideoAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,20 +102,13 @@ public class Game extends AppCompatActivity {
 
         con = (ConstraintLayout)findViewById(R.id.con_layout);
 
-        MobileAds.initialize(this, "ca-app-pub-3863704956834499~8953812244");
 
-        mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
-        mRewardedVideoAd.setRewardedVideoAdListener(this);
-
-        loadRewardedVideoAd();
-
+        //screen height width
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         mute_sound();
         clickevent();
         pauseclick();
-
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);//screen height width
-
         resume_game();
         restart_game();//restarts game if restart button is clicked
 
@@ -150,21 +139,18 @@ public class Game extends AppCompatActivity {
         }, 0, ball_speed);
     }
 
-    public void onStart()
-    {
+    @Override
+    protected void onStart() {
         super.onStart();
-
     }
 
-    public void onPause()
-    {
-        super.onPause(); //Stops the timer and store time remaining in a variable.
-
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 
-    public void onResume()
-    {
-        //Start a new timer with the time remaining in the beforementioned variable
+    @Override
+    protected void onResume() {
         super.onResume();
     }
 
@@ -178,6 +164,7 @@ public class Game extends AppCompatActivity {
 
         if (timeleft == 0) //end of the game
         {
+            //cancel clocks
             clocktimer.cancel();
             clocktimer = null;
             gametimer.cancel();
@@ -201,13 +188,14 @@ public class Game extends AppCompatActivity {
             {
                 resume_button.setVisibility(View.VISIBLE);
                 extra_coins.setVisibility(View.VISIBLE);
-                coins = coins + 1;//(count/100);//earn the 1/100 of score as coins
+                //coins = coins + (count/100);//earn the 1/100 of score as coins
+                coins = coins + 1;
             }
 
+            coins_text.setText("Coins: "+coins);
 
             score = count;
             score_save();
-            coin_save();
         }
     }
 
@@ -409,13 +397,10 @@ public class Game extends AppCompatActivity {
                     extra_coins.setVisibility(View.INVISIBLE);
                 }
                 else if (coins < 200)
-                {
                     Toast.makeText(Game.this, "You need 200 coins", Toast.LENGTH_SHORT).show();
-                }
             }
         });
     }
-
 
     public void score_save() //saves high score only
     {
@@ -435,26 +420,6 @@ public class Game extends AppCompatActivity {
         {
             high_score_view.setText("Top Score: "+ highscore);
         }
-    }
-
-    public void coin_save() //saves high score only
-    {
-        SharedPreferences coinssave = getSharedPreferences("GAME_DATA1", Context.MODE_PRIVATE);
-            //Save
-            SharedPreferences.Editor editor1 = coinssave.edit();
-            editor1.putInt("COINS", coins);
-            editor1.commit();
-
-        coins_text.setText("Coins: "+coins);
-
-    }
-
-    public void get_coins()
-    {
-        if (mRewardedVideoAd.isLoaded()) {
-            mRewardedVideoAd.show();
-        }
-
     }
 
     public void check_combo() //fuction for the combo
@@ -499,7 +464,7 @@ public class Game extends AppCompatActivity {
         }, 1000);
     }
 
-    public void level_attributes(int dp,int ball_speed, String image_name, String color_name)
+    public void level_attributes(int dp, int ball_speed, String image_name, String color_name)
     {
         Resources r = getResources();
         //convert dp to pixels
@@ -574,10 +539,5 @@ public class Game extends AppCompatActivity {
             ball_speed = 350;
             level_attributes(30, 350, "shuttlecock", "shuttlecock");
         }
-    }
-
-    private void loadRewardedVideoAd() {
-        mRewardedVideoAd.loadAd("ca-app-pub-3940256099942544/5224354917",
-                new AdRequest.Builder().build());
     }
 }
