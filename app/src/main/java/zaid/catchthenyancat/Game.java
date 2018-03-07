@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -54,26 +55,25 @@ public class Game extends AppCompatActivity {
 
     int combo = 0;
     int count = 0;
+    int ball_speed = 600;//starting speed
+    int timeleft = 60;
+    int coins = 200;
     int highscore;
     int score;
-    int ball_speed = 600;//starting speed
 
     //character's coordinates
     int x;
     int y;
 
     //screen width and height
-    int w;
-    int h;
-    int timeleft = 60;
+    int screen_width;
+    int screen_height;
 
     //flags to check if buttons clicked
     boolean clicked = false;
     boolean pause_flag = false;
     boolean sound_flag = false;
     boolean gamestopped = false;
-
-    int coins = 200;
     boolean resume_flag = true;
 
     @Override
@@ -183,17 +183,22 @@ public class Game extends AppCompatActivity {
             timer_image.setVisibility(View.INVISIBLE);
 
             if (resume_flag == false)
+            {
                 resume_button.setVisibility(View.GONE);
+                save_coins(0);
+            }
+
             else
             {
                 resume_button.setVisibility(View.VISIBLE);
                 extra_coins.setVisibility(View.VISIBLE);
-                //coins = coins + (count/100);//earn the 1/100 of score as coins
-                coins = coins + 1;
+                //count/100: earn the 1/100 of your score as coins
+                save_coins(count/100);
+                if ((count/100) == 1)
+                    Toast.makeText(this, "You earned "+1+" coin", Toast.LENGTH_LONG).show();
+                else
+                    Toast.makeText(this, "You earned "+count/100+" coins", Toast.LENGTH_LONG).show();
             }
-
-            coins_text.setText("Coins: "+coins);
-
             score = count;
             score_save();
         }
@@ -202,11 +207,11 @@ public class Game extends AppCompatActivity {
     public void movementClock() //clock for the ball to move around
     {
         //screen metrics
-        w = metrics.widthPixels;
-        h = metrics.heightPixels;
+        screen_width = metrics.widthPixels;
+        screen_height = metrics.heightPixels;
 
-        x = rand.nextInt(w-140);//generate random x (0<=x<=max width) 65size of pic
-        y = rand.nextInt((h-200) - 100) + 100;//generate random y (0<=x<=max height)
+        x = rand.nextInt(screen_width-140);//generate random x (0<=x<=max width) 65size of pic
+        y = rand.nextInt((screen_height-200) - 100) + 100;//generate random y (0<=x<=max height)
 
 
         imgclick.setX(x);
@@ -352,7 +357,7 @@ public class Game extends AppCompatActivity {
                 if (coins >= 200 && resume_flag == true)
                 {
                     resume_flag = false;
-                    coins = coins - 200;
+                    save_coins(-200);
 
                     //restart game with prev score and 30 sec time
                     timeleft = 31;
@@ -406,7 +411,6 @@ public class Game extends AppCompatActivity {
     {
         SharedPreferences settings = getSharedPreferences("GAME_DATA", Context.MODE_PRIVATE);
         highscore = settings.getInt("HIGH_SCORE", 0);
-
         if (score > highscore)
         {
             high_score_view.setText("Top Score: "+ score);
@@ -418,8 +422,22 @@ public class Game extends AppCompatActivity {
         }
         else
         {
-            high_score_view.setText("Top Score: "+ highscore);
+            high_score_view.setText("Top Score: " + highscore);
         }
+    }
+
+    public void save_coins(int change)
+    {
+        SharedPreferences settings = getSharedPreferences("GAME_DATA", Context.MODE_PRIVATE);
+        coins = settings.getInt("COINS", 0);
+        coins = coins + change;
+
+            coins_text.setText("Coins: "+ coins);
+
+            //Save
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putInt("COINS", coins);
+            editor.commit();
     }
 
     public void check_combo() //fuction for the combo
