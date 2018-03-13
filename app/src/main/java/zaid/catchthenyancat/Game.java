@@ -21,8 +21,15 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.reward.RewardItem;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 
-public class Game extends AppCompatActivity {
+
+public class Game extends AppCompatActivity implements RewardedVideoAdListener{
 
     //initialization of objects textviews, imageviews, button
     TextView time_text;
@@ -51,6 +58,8 @@ public class Game extends AppCompatActivity {
     Timer clocktimer = new Timer();
     Timer gametimer = new Timer();
     SoundPlayer sound;
+
+    private RewardedVideoAd mRewardedVideoAd;
 
 
     int combo = 0;
@@ -111,6 +120,14 @@ public class Game extends AppCompatActivity {
         pauseclick();
         resume_game();
         restart_game();//restarts game if restart button is clicked
+        get_coins();
+
+        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
+
+        mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
+        mRewardedVideoAd.setRewardedVideoAdListener(this);
+
+        loadRewardedVideoAd();
 
         //timer for game clock
         clocktimer.schedule(new TimerTask() {
@@ -146,12 +163,20 @@ public class Game extends AppCompatActivity {
 
     @Override
     protected void onPause() {
+        mRewardedVideoAd.pause(this);
         super.onPause();
     }
 
     @Override
     protected void onResume() {
+        mRewardedVideoAd.resume(this);
         super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mRewardedVideoAd.destroy(this);
+        super.onDestroy();
     }
 
     public void gameClock() //timer for the game
@@ -558,5 +583,61 @@ public class Game extends AppCompatActivity {
             ball_speed = 375;
             level_attributes(30, ball_speed, "shuttlecock", "shuttlecock");
         }
+    }
+
+    public void get_coins()
+    {
+        extra_coins.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                if (mRewardedVideoAd.isLoaded()) {
+                    mRewardedVideoAd.show();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onRewardedVideoAdLoaded() {
+
+    }
+
+    @Override
+    public void onRewardedVideoAdOpened() {
+
+    }
+
+    @Override
+    public void onRewardedVideoStarted() {
+
+    }
+
+    @Override
+    public void onRewardedVideoAdClosed() {
+
+    }
+
+    @Override
+    public void onRewarded(RewardItem rewardItem)
+    {
+        Toast.makeText(this, "You earned "+80+" coins", Toast.LENGTH_LONG).show();
+        save_coins(80);
+        extra_coins.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void onRewardedVideoAdLeftApplication() {
+
+    }
+
+    @Override
+    public void onRewardedVideoAdFailedToLoad(int i) {
+
+    }
+
+    private void loadRewardedVideoAd() {
+        mRewardedVideoAd.loadAd("ca-app-pub-3940256099942544/5224354917",
+                new AdRequest.Builder().build());
     }
 }
