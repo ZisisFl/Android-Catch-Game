@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/background_light"
-    tools:context="concept_theta.catch_the_ball.Game">
+    tools:context="zaid.catchthenyancat.Game">
 
     <Button
         android:id="@+id/resume_button"
@@ -200,7 +200,7 @@
 
     <ImageView
         android:id="@+id/extra_coins"
-        android:layout_width="30dp"
+        android:layout_width="29dp"
         android:layout_height="30dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"

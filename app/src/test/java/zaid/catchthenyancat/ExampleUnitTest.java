@@ -1,4 +1,4 @@
-package concept_theta.catch_the_ball;
+package zaid.catchthenyancat;
 
 import org.junit.Test;
 

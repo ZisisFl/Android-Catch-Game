@@ -1,4 +1,4 @@
-package concept_theta.catch_the_ball;
+package zaid.catchthenyancat;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

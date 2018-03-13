@@ -1,10 +1,11 @@
-package concept_theta.catch_the_ball;
+package zaid.catchthenyancat;
 
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import java.util.TimerTask;
 
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
 import com.google.android.gms.ads.reward.RewardedVideoAdListener;
@@ -61,7 +63,7 @@ public class Game extends AppCompatActivity implements RewardedVideoAdListener{
 
 
     int combo = 0;
-    int count = 390;
+    int count = 0;
     int ball_speed = 600;//starting speed
     int timeleft = 60;
     int coins = 200;
@@ -589,12 +591,9 @@ public class Game extends AppCompatActivity implements RewardedVideoAdListener{
             @Override
             public void onClick(View view)
             {
-                if (mRewardedVideoAd.isLoaded())
-                {
+                if (mRewardedVideoAd.isLoaded()) {
                     mRewardedVideoAd.show();
                 }
-                else //try again to load
-                    loadRewardedVideoAd();
             }
         });
     }
@@ -605,8 +604,7 @@ public class Game extends AppCompatActivity implements RewardedVideoAdListener{
     }
 
     @Override
-    public void onRewardedVideoAdOpened()
-    {
+    public void onRewardedVideoAdOpened() {
         extra_coins.setVisibility(View.INVISIBLE);
     }
 
@@ -635,6 +633,7 @@ public class Game extends AppCompatActivity implements RewardedVideoAdListener{
 
     @Override
     public void onRewardedVideoAdFailedToLoad(int i) {
+        Toast.makeText(this, "Ad failed to load!", Toast.LENGTH_LONG).show();
 
     }
 
