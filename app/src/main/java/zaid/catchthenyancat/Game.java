@@ -460,6 +460,7 @@ public class Game extends AppCompatActivity {
             else if (combo == 15)
             {
                 time_bonus(5);
+                combo = 0;
             }
         }
         else
@@ -519,43 +520,43 @@ public class Game extends AppCompatActivity {
     {
         if (count == 100)
         {
-            ball_speed = 600; //update variable in case of pausing game
-            level_attributes(60, 600, "basketball", "basket");
+            ball_speed = 575; //update variable in case of pausing game
+            level_attributes(60, ball_speed, "basketball", "basket");
         }
         else if (count == 200)
         {
             ball_speed = 550;
-            level_attributes(55, 550, "bowling", "bowling");
+            level_attributes(55, ball_speed, "bowling", "bowling");
         }
         else if (count == 300)
         {
-            ball_speed = 550;
-            level_attributes(50, 550, "volleyball", "volley");
+            ball_speed = 525;
+            level_attributes(50, ball_speed, "volleyball", "volley");
         }
         else if (count == 400)
         {
             ball_speed = 500;
-            level_attributes(45, 500, "baseball", "baseball");
+            level_attributes(45, ball_speed, "baseball", "baseball");
         }
         else if (count == 500)
         {
-            ball_speed = 500;
-            level_attributes(40, 500, "tennisball", "tennis");
+            ball_speed = 475;
+            level_attributes(40, ball_speed, "tennisball", "tennis");
         }
         else if (count == 600)
         {
             ball_speed = 450;
-            level_attributes(35, 450, "eightball", "billiard");
+            level_attributes(35, ball_speed, "eightball", "billiard");
         }
         else if (count == 700)
         {
-            ball_speed = 450;
-            level_attributes(30, 450, "golfball", "golf");
+            ball_speed = 425;
+            level_attributes(30, ball_speed, "golfball", "golf");
         }
         else if (count == 800)
         {
-            ball_speed = 350;
-            level_attributes(30, 350, "shuttlecock", "shuttlecock");
+            ball_speed = 375;
+            level_attributes(30, ball_speed, "shuttlecock", "shuttlecock");
         }
     }
 }
