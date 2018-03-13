@@ -605,7 +605,7 @@ public class Game extends AppCompatActivity implements RewardedVideoAdListener{
 
     @Override
     public void onRewardedVideoAdOpened() {
-
+        extra_coins.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -633,6 +633,7 @@ public class Game extends AppCompatActivity implements RewardedVideoAdListener{
 
     @Override
     public void onRewardedVideoAdFailedToLoad(int i) {
+        Toast.makeText(this, "Ad failed to load!", Toast.LENGTH_LONG).show();
 
     }
 
