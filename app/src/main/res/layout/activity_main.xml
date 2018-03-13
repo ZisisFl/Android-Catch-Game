@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/background_light"
-    tools:context="zaid.catchthenyancat.MainActivity">
+    tools:context="concept_theta.catch_the_ball.MainActivity">
 
     <Button
         android:id="@+id/start_button"
