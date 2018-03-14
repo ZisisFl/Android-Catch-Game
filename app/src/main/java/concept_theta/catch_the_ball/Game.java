@@ -1,11 +1,10 @@
-package zaid.catchthenyancat;
+package concept_theta.catch_the_ball;
 
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,7 +22,6 @@ import java.util.TimerTask;
 
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
 import com.google.android.gms.ads.reward.RewardedVideoAdListener;
@@ -604,7 +602,8 @@ public class Game extends AppCompatActivity implements RewardedVideoAdListener{
     }
 
     @Override
-    public void onRewardedVideoAdOpened() {
+    public void onRewardedVideoAdOpened()
+    {
         extra_coins.setVisibility(View.INVISIBLE);
     }
 
@@ -623,7 +622,7 @@ public class Game extends AppCompatActivity implements RewardedVideoAdListener{
     {
         Toast.makeText(this, "You earned "+80+" coins", Toast.LENGTH_LONG).show();
         save_coins(80);
-        extra_coins.setVisibility(View.INVISIBLE);
+
     }
 
     @Override
@@ -633,7 +632,6 @@ public class Game extends AppCompatActivity implements RewardedVideoAdListener{
 
     @Override
     public void onRewardedVideoAdFailedToLoad(int i) {
-        Toast.makeText(this, "Ad failed to load!", Toast.LENGTH_LONG).show();
 
     }
 
